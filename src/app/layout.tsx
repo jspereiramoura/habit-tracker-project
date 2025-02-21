@@ -3,8 +3,11 @@ import "./globals.css";
 import { Metadata } from "next";
 import Header from "./_components/header";
 
-const roboto = Roboto({ weight: ["400", "500"] });
-const montserrat = Montserrat({ variable: "--font-montserrat" });
+const roboto = Roboto({ weight: ["400", "500"], subsets: ["latin"] });
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat"
+});
 
 export default function RootLayout({
   children
