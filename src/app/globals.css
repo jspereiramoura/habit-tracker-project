@@ -17,3 +17,15 @@
     border-color: var(--color-gray-200, currentColor);
   }
 }
+
+@layer components {
+  .container {
+    @apply max-w-[1440] mx-auto;
+  }
+}
+
+@theme {
+  --font-montserrat: var(--font-montserrat);
+  --color-primary: #de483a;
+  --color-primary--hovered: #cf3520;
+}
