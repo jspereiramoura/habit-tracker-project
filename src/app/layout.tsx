@@ -1,7 +1,6 @@
+import { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
-import { Metadata } from "next";
-import Header from "./_components/header";
 
 const roboto = Roboto({ weight: ["400", "500"], subsets: ["latin"] });
 const montserrat = Montserrat({
@@ -19,7 +18,6 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${roboto.className} overflow-x-hidden`}
       >
-        <Header />
         {children}
       </body>
     </html>
