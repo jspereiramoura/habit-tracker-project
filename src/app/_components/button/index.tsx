@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import Link from "next/link";
 
 type ButtonTypes = "PRIMARY" | "SECONDARY";
 
@@ -13,7 +13,7 @@ type ButtonProps = {
 
 type ButtonLinkProps = {
   as: "a";
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+} & React.ComponentProps<typeof Link>;
 
 type ButtonPropsWithRoot = ButtonRootProps & (ButtonProps | ButtonLinkProps);
 
@@ -27,18 +27,22 @@ export default function Button({
     PRIMARY: "bg-primary text-white hover:bg-primary--hovered",
     SECONDARY: "bg-white text-primary border-1 border-primary hover:underline"
   };
+  const className = `
+  ${defaultProps.className ?? ""}
+  block h-11 leading-11 text-center
+  px-6 font-semibold rounded-lg
+  ${buttonStyleStrategy[buttonType]}
+`;
 
-  return createElement(
-    as,
-    {
-      ...(defaultProps as React.Attributes),
-      className: `
-        ${defaultProps.className ?? ""}
-        block h-11 leading-11 text-center
-        px-6 font-semibold rounded-lg
-        ${buttonStyleStrategy[buttonType]}
-      `
-    },
-    content ?? defaultProps.children
+  const props = {
+    ...defaultProps,
+    children: content ?? defaultProps.children,
+    className
+  };
+
+  return as === "button" ? (
+    <button {...(props as ButtonProps)} />
+  ) : (
+    <Link {...(props as ButtonLinkProps)} />
   );
 }
