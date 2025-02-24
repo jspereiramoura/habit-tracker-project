@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
+import ReduxProvider from "../redux/provider";
 import "./globals.css";
 
 const roboto = Roboto({ weight: ["400", "500"], subsets: ["latin"] });
@@ -18,7 +19,9 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${roboto.className} overflow-x-hidden`}
       >
-        {children}
+          <ReduxProvider>
+            {children}
+          </ReduxProvider>
       </body>
     </html>
   );
