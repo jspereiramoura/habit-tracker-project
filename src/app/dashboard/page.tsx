@@ -1,7 +1,4 @@
-export default function Home() {
-  return (
-    <main>
-      <div>Hello Dashboard!</div>
-    </main>
-  );
+
+export default function DashboardPage({}) {
+  return <>dashboard</>;
 }
