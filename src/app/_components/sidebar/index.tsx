@@ -17,12 +17,13 @@ const navLinks: {
     name: "Todos Hábitos",
     href: "/dashboard",
     icon: <ListIcon />
-  },
-  {
-    name: "Hábitos",
-    href: "/dashboard/habits",
-    icon: <StatisticsIcon />
   }
+  // TODO: Implementar a página de estatísticas
+  // {
+  //   name: "Estatísticas",
+  //   href: "/dashboard/statistics",
+  //   icon: <StatisticsIcon />
+  // }
 ];
 
 export default function Sidebar({ className }: { className?: string }) {
