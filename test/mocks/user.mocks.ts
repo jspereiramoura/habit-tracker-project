@@ -12,3 +12,9 @@ export const mockedUserRepository = {
   create: jest.fn(),
   findOne: jest.fn()
 };
+
+export const mockUsersService = {
+  findByMail: jest.fn(),
+  findByUsername: jest.fn(),
+  createUser: jest.fn()
+};
