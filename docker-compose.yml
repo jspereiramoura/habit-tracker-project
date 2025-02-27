@@ -1,16 +1,18 @@
 version: "3.8"
 
 services:
-  postgres:
-    image: postgres:15
+  db:
+    image: postgres
     ports:
-      - "5432:5432"
+      - 5432:5432
+    env_file: .env
+    networks:
+      - habit_tracker_network
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: habittracker
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASS
 
-volumes:
-  postgres_data:
+networks:
+  habit_tracker_network:
+    driver: bridge
