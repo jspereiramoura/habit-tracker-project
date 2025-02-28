@@ -3,12 +3,16 @@ import { AuthService } from "./auth.service";
 import { UsersService } from "../users/users.service";
 import { mockedUser, mockUsersService } from "../../test/mocks/user.mocks";
 import { PasswordEncoderService } from "./password-encoder/password-encoder.service";
+import { JwtService } from "@nestjs/jwt";
 
 describe("AuthService", () => {
   let service: AuthService;
   const mockPasswordEncoderService = {
     hashPassword: jest.fn(),
     comparePassword: jest.fn()
+  };
+  const mockJwtService = {
+    sign: jest.fn()
   };
 
   beforeEach(async () => {
@@ -22,6 +26,10 @@ describe("AuthService", () => {
         {
           provide: PasswordEncoderService,
           useValue: mockPasswordEncoderService
+        },
+        {
+          provide: JwtService,
+          useValue: mockJwtService
         }
       ]
     }).compile();
@@ -39,7 +47,7 @@ describe("AuthService", () => {
     it("should throw an error if not found user during sign in process", async () => {
       await expect(
         service.signIn({ username: "test", password: "test" })
-      ).rejects.toThrow("User not found");
+      ).rejects.toThrow("Invalid Credentials");
     });
 
     it("should throw an error if password is invalid during sign in process", async () => {
@@ -52,19 +60,26 @@ describe("AuthService", () => {
 
       await expect(
         service.signIn({ username: "test", password: "test" })
-      ).rejects.toThrow("Invalid password");
+      ).rejects.toThrow("Invalid Credentials");
     });
 
     it("should return user if sign in process is successful", async () => {
+      mockJwtService.sign.mockReturnValueOnce("test");
       mockUsersService.findByUsername.mockResolvedValueOnce(mockedUser);
-
       mockPasswordEncoderService.comparePassword.mockResolvedValueOnce(true);
 
       const user = await service.signIn({
         username: mockedUser.username,
         password: "some_password"
       });
-      expect(user).toStrictEqual(mockedUser);
+      expect(user).toStrictEqual({
+        access_token: "test",
+        user: {
+          uuid: mockedUser.uuid,
+          mail: mockedUser.mail,
+          username: mockedUser.username
+        }
+      });
     });
   });
 
@@ -106,7 +121,11 @@ describe("AuthService", () => {
         password: "test"
       });
 
-      expect(user).toStrictEqual(mockedUser);
+      expect(user).toStrictEqual({
+        uuid: mockedUser.uuid,
+        mail: mockedUser.mail,
+        username: mockedUser.username
+      });
     });
   });
 });
