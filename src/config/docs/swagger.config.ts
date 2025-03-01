@@ -1,22 +1,35 @@
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { INestApplication } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { signInSchema, signUpSchema } from "../../auth/auth.dto";
+import {
+  logsQuerySchema,
+  updateLogSchema
+} from "../../habit/dto/habit-log.dto";
+import { habitSchema } from "../../habit/dto/habit.dto";
 
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
     .setTitle("Owl Habit Tracker API")
     .setDescription("The Owl Habit Tracker API description")
     .setVersion("1.0")
-    .addBasicAuth()
-    .addSecurity("basic", {
+    .addBearerAuth({
       type: "http",
-      scheme: "basic"
+      scheme: "Bearer",
+      bearerFormat: "JWT",
+      in: "Header"
     })
     .build();
 
   const swaggerDoc = SwaggerModule.createDocument(app, config);
 
-  const zodGen = new OpenApiGeneratorV3([]);
+  const zodGen = new OpenApiGeneratorV3([
+    signInSchema,
+    signUpSchema,
+    habitSchema,
+    updateLogSchema,
+    logsQuerySchema
+  ]);
 
   const zodComponents = zodGen.generateComponents();
 

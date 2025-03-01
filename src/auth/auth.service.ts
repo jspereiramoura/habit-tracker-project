@@ -1,14 +1,18 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { Users } from "../users/users.entity";
 import { UsersService } from "../users/users.service";
-import { PasswordEncoderService } from "./password-encoder/password-encoder.service";
 import {
   SignInDTO,
   SignInOutputDTO,
   SignUpDTO,
   SignUpOutputDTO
 } from "./auth.dto";
-import { Users } from "../users/users.entity";
+import { PasswordEncoderService } from "./password-encoder/password-encoder.service";
 
 @Injectable()
 export class AuthService {
@@ -33,7 +37,8 @@ export class AuthService {
 
   private async getUserStrategy(userDto: SignInDTO) {
     if (userDto.mail) return this.usersService.findByMail(userDto.mail);
-    if (!userDto.username) throw new Error("Username or email is required");
+    if (!userDto.username)
+      throw new UnauthorizedException("Username or email is required");
     return this.usersService.findByUsername(userDto.username);
   }
 
@@ -62,10 +67,10 @@ export class AuthService {
     let user: Users | null;
 
     user = await this.usersService.findByMail(userDto.mail);
-    if (user) throw new Error("This email is already in use");
+    if (user) throw new ConflictException("This email is already in use");
 
     user = await this.usersService.findByUsername(userDto.username);
-    if (user) throw new Error("This username is already in use");
+    if (user) throw new ConflictException("This username is already in use");
 
     const output = await this.usersService.createUser({
       mail: userDto.mail,

@@ -37,11 +37,22 @@ describe("HabitController", () => {
 
   it("should create a habit", async () => {
     const user = { sub: "123" };
-    const habit: any = { name: "habit" };
+    const habit = { id: "mockedId", name: "habit" };
     habitServiceMock.createHabit.mockResolvedValueOnce(habit);
+    const spySetHeader = jest.fn();
     await expect(
-      controller.createHabit({ user } as any, habit)
+      controller.createHabit(
+        { user } as any,
+        habit as any,
+        {
+          setHeader: spySetHeader
+        } as any
+      )
     ).resolves.toStrictEqual(habit);
+    expect(spySetHeader).toHaveBeenCalledWith(
+      "Location",
+      `/habits/${habit.id}`
+    );
     expect(habitServiceMock.createHabit).toHaveBeenCalledWith(user.sub, habit);
   });
 

@@ -1,11 +1,15 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { HabitLog } from "../entities/habit-log.entity";
 import { Repository } from "typeorm";
 import { UUIDTypes } from "uuid";
-import { Habit } from "../entities/habit.entity";
-import { HabitStatus } from "../entities/habit-status.enum";
 import { UpdateLogDto } from "../dto/habit-log.dto";
+import { HabitLog } from "../entities/habit-log.entity";
+import { HabitStatus } from "../entities/habit-status.enum";
+import { Habit } from "../entities/habit.entity";
 
 @Injectable()
 export class HabitLogService {
@@ -54,7 +58,7 @@ export class HabitLogService {
       relations: ["habit", "habit.user"]
     });
 
-    if (!log) throw new Error("Habit Log not found");
+    if (!log) throw new NotFoundException("Habit Log not found");
     if (log.habit.user.uuid !== userId)
       throw new UnauthorizedException("This habit log does not belong to you");
 

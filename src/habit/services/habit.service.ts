@@ -1,10 +1,14 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { In, Repository } from "typeorm";
-import { Habit } from "../entities/habit.entity";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { UUIDTypes } from "uuid";
-import { UpdateHabitDto } from "../dto/habit.dto";
 import { Users } from "../../users/users.entity";
+import { UpdateHabitDto } from "../dto/habit.dto";
+import { Habit } from "../entities/habit.entity";
 
 @Injectable()
 export class HabitService {
@@ -18,7 +22,7 @@ export class HabitService {
   async createHabit(userId: UUIDTypes, habit: Habit): Promise<Habit> {
     const user = await this.userRepository.findOne({ where: { uuid: userId } });
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new UnauthorizedException("User not found");
 
     habit.user = user;
     return await this.habitRepository.save(habit);
@@ -40,7 +44,7 @@ export class HabitService {
       relations: ["user"]
     });
 
-    if (!habit) throw new Error("Habit not found");
+    if (!habit) throw new NotFoundException("Habit not found");
     if (habit.user.uuid !== userId) {
       throw new UnauthorizedException(
         "You are not allowed to update this habit"

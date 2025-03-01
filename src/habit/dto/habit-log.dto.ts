@@ -1,17 +1,30 @@
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
 import { HabitStatus } from "../entities/habit-status.enum";
 
-export const updateLogSchema = z.object({
-  habitId: z.string().optional(),
-  status: z.nativeEnum(HabitStatus)
-});
+extendZodWithOpenApi(z);
 
-export const logsQuerySchema = z.object({
-  date: z.preprocess((arg: string) => {
-    const [year, month, day] = arg.split("-");
-    return new Date(`${year}-${month}-${day}`);
-  }, z.date())
-});
+export const updateLogSchema = z
+  .object({
+    habitId: z.string().optional().openapi({
+      example: "fake-habit-uuid"
+    }),
+    status: z.nativeEnum(HabitStatus).openapi({
+      example: HabitStatus.COMPLETED,
+      description: "Status of the habit"
+    })
+  })
+  .openapi("UpdateHabitLogObject");
+
+export const logsQuerySchema = z
+  .object({
+    date: z
+      .preprocess((arg: string) => {
+        return new Date(arg);
+      }, z.date())
+      .openapi({ example: "2021-01-27" })
+  })
+  .openapi("DataQueryObject");
 
 export type UpdateLogDto = z.infer<typeof updateLogSchema>;
 export type LogsQueryDto = z.infer<typeof logsQuerySchema>;
