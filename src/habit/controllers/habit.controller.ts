@@ -28,7 +28,7 @@ import { UUIDTypes } from "uuid";
 import { JwtPayload } from "../../auth/auth.dto";
 import { JwtAuthGuard } from "../../auth/guards/jwt-auth.guard";
 import { ZodPipe } from "../../config/zod/zod.pipe";
-import { UpdateHabitDto, habitSchema } from "../dto/habit.dto";
+import { UpdateHabitDto, updateHabitSchema } from "../dto/habit.dto";
 import { Habit } from "../entities/habit.entity";
 import { HabitService } from "../services/habit.service";
 
@@ -57,7 +57,7 @@ export class HabitController {
   @Post()
   @ApiCreatedResponse({
     description: "The record has been successfully created.",
-    type: Habit,
+    schema: { $ref: "#/components/schemas/Habit" },
     headers: {
       Location: {
         description: "The URL of the new resource.",
@@ -82,7 +82,7 @@ export class HabitController {
 
   @Patch(":id")
   @ApiBody({
-    schema: { $ref: "#/components/schemas/Habit" }
+    schema: { $ref: "#/components/schemas/UpdateHabit" }
   })
   @ApiOkResponse({
     type: Habit
@@ -97,7 +97,7 @@ export class HabitController {
   updateHabit(
     @Req() req: Request,
     @Param("id") id: UUIDTypes,
-    @Body(new ZodPipe(habitSchema)) body: UpdateHabitDto
+    @Body(new ZodPipe(updateHabitSchema)) body: UpdateHabitDto
   ) {
     return this.habitService.updateHabit(
       id,

@@ -33,6 +33,9 @@ export class Habit {
   @UpdateDateColumn({ type: "timestamp", nullable: true })
   updatedAt?: Date;
 
+  @Column("simple-array", { nullable: true })
+  tags?: string[];
+
   @OneToMany(() => HabitLog, habitLog => habitLog.habit)
   logs: HabitLog[];
 }

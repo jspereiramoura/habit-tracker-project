@@ -6,7 +6,10 @@ import {
   logsQuerySchema,
   updateLogSchema
 } from "../../habit/dto/habit-log.dto";
-import { habitSchema } from "../../habit/dto/habit.dto";
+import {
+  createHabitSchema,
+  updateHabitSchema
+} from "../../habit/dto/habit.dto";
 
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
@@ -26,7 +29,8 @@ export function setupSwagger(app: INestApplication): void {
   const zodGen = new OpenApiGeneratorV3([
     signInSchema,
     signUpSchema,
-    habitSchema,
+    createHabitSchema,
+    updateHabitSchema,
     updateLogSchema,
     logsQuerySchema
   ]);
