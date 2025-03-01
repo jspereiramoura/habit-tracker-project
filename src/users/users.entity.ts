@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { UUIDTypes } from "uuid";
+import { Habit } from "../habit/entities/habit.entity";
 
 @Entity()
 export class Users {
@@ -14,4 +15,7 @@ export class Users {
 
   @Column({ unique: true })
   mail: string;
+
+  @OneToMany(() => Habit, habit => habit.user, { lazy: true })
+  habits: Promise<Habit[]>;
 }

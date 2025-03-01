@@ -4,7 +4,8 @@ export const mockedUser: Users = {
   uuid: "55ed4505-109d-45b8-bf91-e50e2259643d",
   hash: "hashedPass",
   mail: "test@test.com",
-  username: "test"
+  username: "test",
+  habits: Promise.resolve([])
 };
 
 export const mockedUserRepository = {
