@@ -1,14 +1,15 @@
 import { Module } from "@nestjs/common";
-import { HabitService } from "./services/habit.service";
-import { HabitLogService } from "./services/habit-log.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Habit } from "./entities/habit.entity";
-import { HabitLog } from "./entities/habit-log.entity";
-import { HabitController } from "./controllers/habit.controller";
+import { Users } from "../users/users.entity";
 import { HabitLogController } from "./controllers/habit-log.controller";
+import { HabitController } from "./controllers/habit.controller";
+import { HabitLog } from "./entities/habit-log.entity";
+import { Habit } from "./entities/habit.entity";
+import { HabitLogService } from "./services/habit-log.service";
+import { HabitService } from "./services/habit.service";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Habit, HabitLog])],
+  imports: [TypeOrmModule.forFeature([Habit, HabitLog, Users])],
   providers: [HabitService, HabitLogService],
   controllers: [HabitController, HabitLogController]
 })
