@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
+import MSWConfig from "../context/mswConfig";
 import ReduxProvider from "../redux/provider";
 import ModalContainer from "./_components/modal/modalContainer";
 import "./globals.css";
@@ -20,10 +21,12 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${roboto.className} overflow-x-hidden`}
       >
+        <MSWConfig>
           <ReduxProvider>
             <ModalContainer />
             {children}
           </ReduxProvider>
+        </MSWConfig>
       </body>
     </html>
   );
