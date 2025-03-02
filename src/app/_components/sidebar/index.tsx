@@ -6,6 +6,8 @@ import CloseIcon from "../icons/CloseIcon";
 import ListIcon from "../icons/ListIcon";
 import LogoIcon from "../icons/Logo";
 import SidebarIcon from "../icons/SidebarIcon";
+import Button from "../button";
+import { doLogout } from "../../../utils/doLogout";
 
 const navLinks: {
   name: string;
@@ -90,6 +92,9 @@ export default function Sidebar({ className }: { className?: string }) {
             ))}
           </ul>
         </nav>
+        <Button buttonType="SECONDARY" className="mt-auto" onClick={doLogout}>
+          Sair
+        </Button>
       </div>
       <button
         className={`
