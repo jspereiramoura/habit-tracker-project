@@ -3,6 +3,7 @@ import { API_URL } from "../../config/api";
 
 interface NewHabit {
   name: string;
+  tags?: string[];
   description?: string;
 }
 

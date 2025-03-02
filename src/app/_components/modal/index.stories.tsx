@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 import Modal from ".";
 import ReduxWrapper from "../../../../.storybook/decorators/ReduxWrapper";
-import { ModalBodyTypes } from "./templates";
+import { ModalBodyTypes } from "./enum";
 
 const meta: Meta<typeof Modal> = {
   title: "Atoms/Modal",

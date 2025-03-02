@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useAddHabitMutation } from "../../../../../redux/services/habits";
+import { closeModal } from "../../../../../redux/slices/modalSlice";
+import { useAppDispatch } from "../../../../../redux/storeHooks";
+import Button from "../../../button";
 import Input from "../../../input";
 import Tooltip from "../../../tooltip";
-import Button from "../../../button";
-import { useAppDispatch } from "../../../../../redux/store";
-import { closeModal } from "../../../../../redux/slices/modalSlice";
-import { useAddHabitMutation } from "../../../../../redux/services/habits";
 
 const AddHabitModalBody = () => {
   const dispatch = useAppDispatch();

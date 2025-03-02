@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ModalBodyTypes } from "../../app/_components/modal/templates";
+import { ModalBodyTypes } from "../../app/_components/modal/enum";
 
 export type ModalProps = {
   title: string;

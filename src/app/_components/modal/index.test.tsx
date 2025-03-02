@@ -3,7 +3,7 @@ import { vi } from "vitest";
 import Modal from ".";
 import { ModalProps } from "../../../redux/slices/modalSlice";
 import { renderWithProviders } from "../../../test/utils/renderWithProviders";
-import { ModalBodyTypes } from "./templates";
+import { ModalBodyTypes } from "./enum";
 
 function renderTest(partialModalProps: Partial<ModalProps> = {}) {
   renderWithProviders(<Modal />, {

@@ -1,5 +1,5 @@
 "use client";
-import { useAppSelector } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/storeHooks";
 import { modalBodyMap } from "./templates";
 
 const Modal = () => {

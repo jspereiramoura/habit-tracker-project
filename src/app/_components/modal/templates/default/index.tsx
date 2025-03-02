@@ -1,5 +1,5 @@
 import { closeModal } from "../../../../../redux/slices/modalSlice";
-import { useAppDispatch } from "../../../../../redux/store";
+import { useAppDispatch } from "../../../../../redux/storeHooks";
 import Button from "../../../button";
 
 export default function DefaultModalBody() {

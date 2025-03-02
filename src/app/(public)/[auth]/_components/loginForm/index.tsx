@@ -9,10 +9,10 @@ import {
   useRegisterMutation
 } from "../../../../../redux/services/auth";
 import { openModal } from "../../../../../redux/slices/modalSlice";
-import { useAppDispatch } from "../../../../../redux/store";
 import Button from "../../../../_components/button";
 import Input from "../../../../_components/input";
 import { errorModalTexts, loginErrorMessages } from "./errorMessages";
+import { useAppDispatch } from "../../../../../redux/storeHooks";
 
 const loginSchema = z.object({
   username: z.string().nonempty(loginErrorMessages.EMPTY_USER),
