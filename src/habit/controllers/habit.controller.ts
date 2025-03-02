@@ -77,7 +77,7 @@ export class HabitController {
     const user = req.user as JwtPayload;
     const createdHabit = await this.habitService.createHabit(user.sub, body);
     res.setHeader("Location", `/habits/${createdHabit.id.toString()}`);
-    return createdHabit;
+    res.status(HttpStatus.CREATED).send(createdHabit);
   }
 
   @Patch(":id")
