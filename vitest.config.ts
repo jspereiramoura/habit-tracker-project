@@ -10,7 +10,7 @@ export default defineConfig({
     coverage: {
       provider: "istanbul",
       reporter: ["text", "json", "html", "lcov"],
-      include: ["src/app/**/*"],
+      include: ["src/**/*", "!src/test/**/*"],
       reportsDirectory: "src/test/coverage",
       extension: [".js", ".jsx", ".ts", ".tsx"]
     }
