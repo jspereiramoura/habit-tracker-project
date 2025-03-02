@@ -3,11 +3,14 @@ import React from "react";
 import { Provider } from "react-redux";
 import { makeStore } from "../../src/redux/store";
 
+const reduxWrapperDecorator: Decorator = (Story, context) => {
+  const preloadedState = context.parameters?.preloadedState ?? {};
 
-const reduxWrapperDecorator: Decorator = (Story) => (
-  <Provider store={makeStore()}>
-    <Story />
-  </Provider>
-);
+  return (
+    <Provider store={makeStore(preloadedState)}>
+      <Story />
+    </Provider>
+  );
+};
 
 export default reduxWrapperDecorator;
