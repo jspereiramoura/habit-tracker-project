@@ -7,7 +7,7 @@ const Modal = () => {
     state => state.modal
   );
   return open ? (
-    <div className="z-10 bg-overlay w-dvw h-dvh flex items-center fixed inset-0">
+    <div className="z-20 bg-overlay w-dvw h-dvh flex items-center fixed inset-0">
       <dialog
         open={open}
         aria-modal="true"

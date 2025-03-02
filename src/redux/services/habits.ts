@@ -42,7 +42,7 @@ export const habitsApi = createApi({
         method: "POST",
         body: newHabit
       }),
-      invalidatesTags: ["Habit"]
+      invalidatesTags: ["Habit", "HabitLogs"]
     }),
     updateHabit: builder.mutation<Habit, Partial<Habit>>({
       query: ({ id, ...updatedData }) => ({
@@ -57,13 +57,14 @@ export const habitsApi = createApi({
         url: `/${id}`,
         method: "DELETE"
       }),
-      invalidatesTags: ["Habit"]
+      invalidatesTags: ["Habit", "HabitLogs"]
     }),
     getHabitLogs: builder.query<
       Record<"all" | "completed" | "uncompleted", HabitLog[]>,
       string
     >({
       query: date => `/logs/?date=${date}`,
+      providesTags: ["HabitLogs"],
       transformResponse: (response: HabitLog[]) => {
         return {
           all: response,
@@ -77,6 +78,7 @@ export const habitsApi = createApi({
       }
     }),
     updateHabitLog: builder.mutation<HabitLog, Partial<HabitLog>>({
+      invalidatesTags: ["HabitLogs"],
       query: ({ id, ...updatedData }) => ({
         url: `/logs/${id}`,
         method: "PATCH",

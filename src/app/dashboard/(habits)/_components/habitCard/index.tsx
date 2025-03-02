@@ -1,64 +1,77 @@
-import { useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
+import {
+  useDeleteHabitMutation,
+  useUpdateHabitLogMutation
+} from "../../../../../redux/services/habits";
 import Checkbox from "../../../../_components/checkbox";
 import TrashIcon from "../../../../_components/icons/TrashIcon";
 
 type HabitCardProps = {
+  id: string;
   name: string;
   tags: string[];
+  habitId: string;
   completed: boolean;
   className?: string;
-  onDelete?: () => void;
-  onChangeStatus?: (completed: boolean) => void;
 };
 
-// TODO: Adicionar a funcionalidade de editar tags
-
 const HabitCard = ({
+  id,
   name,
   tags,
+  habitId,
   completed = false,
-  className,
-  onDelete,
-  onChangeStatus
+  className
 }: HabitCardProps) => {
-  const [currentTags] = useState(tags);
-  const [isCompleted, setIsCompleted] = useState(completed);
+  const [deleteMutation] = useDeleteHabitMutation();
+  const [updateMutation] = useUpdateHabitLogMutation();
 
-  const handleChangeStatus = (status: boolean) => {
-    setIsCompleted(status);
-    onChangeStatus?.(status);
+  const [currentTags] = useState(tags);
+  const isCompletedRef = useRef(completed);
+
+  const handleDelete = () => {
+    deleteMutation(habitId);
   };
+
+  const handleChangeStatus = useCallback(
+    (status: boolean) => {
+      isCompletedRef.current = status;
+      updateMutation({
+        id,
+        status: isCompletedRef.current ? "completed" : "missed"
+      });
+    },
+    [id, updateMutation]
+  );
 
   return (
     <label
-      htmlFor={name}
+      htmlFor={id}
       className={`
         ${className ?? ""}
-        flex items-center gap-8 p-4 rounded-lg bg-gray-50
+        flex items-center gap-8 p-4 mb-4 rounded-lg bg-gray-50
         cursor-pointer hover:shadow-md select-none focus:outline-primary
      `}
       tabIndex={0}
-      aria-checked={isCompleted}
+      aria-checked={isCompletedRef.current}
       onKeyDown={({ key, currentTarget }) => {
         if (key === "Enter" && document.activeElement === currentTarget)
-          handleChangeStatus(!isCompleted);
+          handleChangeStatus(!isCompletedRef.current);
       }}
     >
       <Checkbox
-        id={name}
+        id={id}
         tabIndex={-1}
-        checked={isCompleted}
+        checked={isCompletedRef.current}
         aria-labelledby={`${name}-label`}
         onChange={({ target }) => handleChangeStatus(target.checked)}
       />
       <div className="flex flex-col gap-1">
-        <h2 id={`${name}-label`} className="text-lg">
-          {name}
-        </h2>
+        <h2 id={`${name}-label`}>{name}</h2>
         <ul aria-live="polite" className="flex space-x-2">
-          {currentTags.map(tag => (
+          {currentTags?.map(tag => (
             <li
-              key={tag}
+              key={`habit__${name}__${tag}`}
               aria-label={`Tag: ${tag}`}
               className="text-xs p-1 rounded-sm bg-red-100 text-primary font-mono"
             >
@@ -69,7 +82,7 @@ const HabitCard = ({
       </div>
       <section aria-label={`Ações do Hábito ${name}`} className="ml-auto">
         <button
-          onClick={onDelete}
+          onClick={handleDelete}
           className="cursor-pointer group"
           aria-label={`Deletar Hábito ${name}`}
         >
@@ -83,4 +96,4 @@ const HabitCard = ({
   );
 };
 
-export default HabitCard;
+export default memo(HabitCard);
