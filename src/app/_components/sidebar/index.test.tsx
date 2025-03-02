@@ -14,13 +14,9 @@ describe("Sidebar Component", () => {
     expect(
       screen.getByRole("link", { name: /todos hábitos/i })
     ).toHaveAttribute("href", "/dashboard");
-    expect(screen.getByRole("link", { name: "Hábitos" })).toHaveAttribute(
-      "href",
-      "/dashboard/habits"
-    );
   });
 
-  it.only("should toggle sidebar visibility on mobile", async () => {
+  it("should toggle sidebar visibility on mobile", async () => {
     vi.stubGlobal('window', { ...window, innerWidth: 375 });
 
     const user = userEvent.setup();

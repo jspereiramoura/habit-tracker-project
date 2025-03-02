@@ -1,12 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import checkIfIsMobile from "../../../utils/checkIfIsMobile";
 import CloseIcon from "../icons/CloseIcon";
 import ListIcon from "../icons/ListIcon";
 import LogoIcon from "../icons/Logo";
 import SidebarIcon from "../icons/SidebarIcon";
-import StatisticsIcon from "../icons/StatisticsIcon";
-import checkIfIsMobile from "../../../utils/checkIfIsMobile";
 
 const navLinks: {
   name: string;
@@ -37,8 +36,8 @@ export default function Sidebar({ className }: { className?: string }) {
         style={{ visibility: isOpen || !isMobile ? "visible" : "hidden" }}
         className={`
         ${className ?? ""}
-        relative flex h-dvh
-        w-dvw lg:w-[280]
+        fixed z-10 lg:z-0 lg:relative flex h-dvh
+        w-dvw lg:w-[280px]
         lg:border-r-2
         flex-col bg-white p-4
     `}
@@ -66,6 +65,7 @@ export default function Sidebar({ className }: { className?: string }) {
               <li key={link.name} className="py-2">
                 <Link
                   href={link.href}
+                  onClick={() => setIsOpen(false)}
                   className={`
                       rounded-lg
                       flex items-center gap-4
