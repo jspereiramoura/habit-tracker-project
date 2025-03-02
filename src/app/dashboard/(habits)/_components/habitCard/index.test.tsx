@@ -10,6 +10,7 @@ vi.mock("../../../../../redux/services/habits.ts", { spy: true });
 const TestWrapper = () => (
   <HabitCard
     id="1"
+    habitId="1"
     completed={false}
     name="Test Habit"
     tags={["tag1", "tag2"]}
@@ -28,10 +29,10 @@ describe("HabitCard", () => {
     expect(screen.getByText("tag2")).toBeInTheDocument();
   });
 
-  it.skip("should call update mutation when checkbox is clicked", async () => {
+  it("should call update mutation when checkbox is clicked", async () => {
     const user = userEvent.setup();
     const updateMutation = vi.fn();
-    (habitsService.useUpdateHabitMutation as Mock).mockReturnValue([
+    (habitsService.useUpdateHabitLogMutation as Mock).mockReturnValue([
       updateMutation
     ]);
 
@@ -72,10 +73,10 @@ describe("HabitCard", () => {
     expect(updateMutation).not.toHaveBeenCalled();
   });
 
-  it.skip("should call onChangeStatus when Enter key is pressed", async () => {
+  it("should call onChangeStatus when Enter key is pressed", async () => {
     const user = userEvent.setup();
     const updateMutation = vi.fn();
-    (habitsService.useUpdateHabitMutation as Mock).mockReturnValue([
+    (habitsService.useUpdateHabitLogMutation as Mock).mockReturnValue([
       updateMutation
     ]);
 
@@ -83,6 +84,9 @@ describe("HabitCard", () => {
     const label = screen.getByLabelText(`Ações do Hábito Test Habit`);
 
     await user.type(label, "{enter}");
-    expect(updateMutation).toHaveBeenCalledWith({ id: "1", completed: true });
+    expect(updateMutation).toHaveBeenCalledWith({
+      id: "1",
+      status: "completed"
+    });
   });
 });
