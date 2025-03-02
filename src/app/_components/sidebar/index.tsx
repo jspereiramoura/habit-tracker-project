@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import checkIfIsMobile from "../../../utils/checkIfIsMobile";
 import CloseIcon from "../icons/CloseIcon";
 import ListIcon from "../icons/ListIcon";
@@ -26,14 +26,22 @@ const navLinks: {
 ];
 
 export default function Sidebar({ className }: { className?: string }) {
-  const isMobile = checkIfIsMobile();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setIsMobile(checkIfIsMobile());
+  }, []);
 
   return (
-    <>
+    <div className="z-10">
       <div
         data-testid="sidebar"
-        style={{ visibility: isOpen || !isMobile ? "visible" : "hidden" }}
+        style={{
+          visibility: (isOpen || !isMobile) && mounted ? "visible" : "hidden"
+        }}
         className={`
         ${className ?? ""}
         fixed z-10 lg:z-0 lg:relative flex h-dvh
@@ -96,6 +104,6 @@ export default function Sidebar({ className }: { className?: string }) {
       >
         <SidebarIcon />
       </button>
-    </>
+    </div>
   );
 }
