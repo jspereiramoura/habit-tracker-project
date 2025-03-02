@@ -227,7 +227,6 @@ describe("Components: LoginForm", () => {
       await user.click(submitButton);
 
       expect(openErrorModalSpy).toHaveBeenCalledWith({
-        open: true,
         ...errorModalTexts[errorType as "GENERIC" | "UNAUTHORIZED"]
       });
     }

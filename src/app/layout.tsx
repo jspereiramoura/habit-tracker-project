@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { Montserrat, Roboto } from "next/font/google";
 import MSWConfig from "../context/mswConfig";
 import ReduxProvider from "../redux/provider";
-import ModalContainer from "./_components/modal/modalContainer";
 import "./globals.css";
+import Modal from "./_components/modal";
 
 const roboto = Roboto({ weight: ["400", "500"], subsets: ["latin"] });
 const montserrat = Montserrat({
@@ -23,7 +23,7 @@ export default function RootLayout({
       >
         <MSWConfig>
           <ReduxProvider>
-            <ModalContainer />
+            <Modal />
             {children}
           </ReduxProvider>
         </MSWConfig>

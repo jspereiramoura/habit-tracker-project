@@ -42,7 +42,6 @@ export default function LoginForm({ isLogin }: { isLogin: boolean }) {
   const openErrorModal = (isUnauthorized: boolean) => {
     dispatch(
       openModal({
-        open: true,
         ...(isUnauthorized
           ? errorModalTexts.UNAUTHORIZED
           : errorModalTexts.GENERIC)
