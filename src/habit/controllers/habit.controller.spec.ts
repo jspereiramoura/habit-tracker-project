@@ -39,20 +39,26 @@ describe("HabitController", () => {
     const user = { sub: "123" };
     const habit = { id: "mockedId", name: "habit" };
     habitServiceMock.createHabit.mockResolvedValueOnce(habit);
+    const sendSpy = jest.fn().mockReturnValueOnce(habit);
+    const statusSpy = jest.fn().mockReturnValueOnce({
+      send: sendSpy
+    });
     const spySetHeader = jest.fn();
-    await expect(
-      controller.createHabit(
-        { user } as any,
-        habit as any,
-        {
-          setHeader: spySetHeader
-        } as any
-      )
-    ).resolves.toStrictEqual(habit);
+    await controller.createHabit(
+      { user } as any,
+      habit as any,
+      {
+        status: statusSpy,
+        setHeader: spySetHeader
+      } as any
+    );
+
     expect(spySetHeader).toHaveBeenCalledWith(
       "Location",
       `/habits/${habit.id}`
     );
+    expect(statusSpy).toHaveBeenCalledWith(201);
+    expect(sendSpy).toHaveBeenCalledWith(habit);
     expect(habitServiceMock.createHabit).toHaveBeenCalledWith(user.sub, habit);
   });
 
