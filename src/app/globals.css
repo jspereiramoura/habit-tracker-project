@@ -28,4 +28,5 @@
   --font-montserrat: var(--font-montserrat);
   --color-primary: #de483a;
   --color-primary--hovered: #cf3520;
+  --color-overlay: rgba(0, 0, 0, 0.4);
 }
