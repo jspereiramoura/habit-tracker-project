@@ -11,7 +11,7 @@ export default function LoginPage() {
   return (
     <section
       aria-label={`Sessão de ${isLogin ? "Login" : "Registro"}`}
-      className="flex flex-col mx-auto w-full max-w-[400px] text-center"
+      className="flex flex-col mx-auto w-full max-w-[300px] md:max-w-[400px] text-center"
     >
       <h1 className="text-xl font-bold font-montserrat mb-4">{currentPage}</h1>
       <LoginForm isLogin={isLogin} />

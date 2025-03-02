@@ -8,7 +8,7 @@ export default function Home() {
       className="flex px-5 flex-col text-center items-center justify-center 
     h-[calc(100dvh-141px)] md:h-[calc(100dvh-81px)]"
     >
-      <ActivityTrackerIllustration className="w-90 mb-4" />
+      <ActivityTrackerIllustration className="max-w-90 mb-4" />
       <h1 className="text-lg md:text-4xl font-bold font-montserrat">
         Organize seus hábitos com facilidade!
       </h1>
