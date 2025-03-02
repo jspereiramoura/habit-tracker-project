@@ -6,9 +6,9 @@ export default function PublicPagesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="flex flex-col h-dvh">
       <Header />
-      {children}
-    </>
+      <main className="flex grow items-center justify-center">{children}</main>
+    </div>
   );
 }

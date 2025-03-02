@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:mocked-api": "MUST_MOCK_API=true next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -16,9 +17,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.0",
     "next": "15.1.7",
+    "nookies": "^2.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",

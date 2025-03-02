@@ -1,15 +1,19 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import { authApi } from "./services/auth";
 import modalReducer from "./slices/modalSlice";
 
 const rootReducers = combineReducers({
-  modal: modalReducer
+  modal: modalReducer,
+  [authApi.reducerPath]: authApi.reducer
 });
 
 export function makeStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     preloadedState,
-    reducer: rootReducers
+    reducer: rootReducers,
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware().concat(authApi.middleware)
   });
 }
 
