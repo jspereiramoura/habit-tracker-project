@@ -2,10 +2,12 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { authApi } from "./services/auth";
 import modalReducer from "./slices/modalSlice";
+import { habitsApi } from "./services/habits";
 
 const rootReducers = combineReducers({
   modal: modalReducer,
-  [authApi.reducerPath]: authApi.reducer
+  [authApi.reducerPath]: authApi.reducer,
+  [habitsApi.reducerPath]: habitsApi.reducer
 });
 
 export function makeStore(preloadedState?: Partial<RootState>) {
@@ -13,7 +15,9 @@ export function makeStore(preloadedState?: Partial<RootState>) {
     preloadedState,
     reducer: rootReducers,
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(authApi.middleware)
+      getDefaultMiddleware()
+        .concat(authApi.middleware)
+        .concat(habitsApi.middleware)
   });
 }
 
