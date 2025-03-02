@@ -1,26 +1,29 @@
-"use client"
+"use client";
 
 import { ComponentProps, useEffect, useState } from "react";
 import Button from "../button";
 import LogoIcon from "../icons/Logo";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
+  const pathname = usePathname()
   const [mustShowRegisterLinks, setMustShowRegisterLinks] = useState(false);
 
+
   const navLinks: ComponentProps<typeof Button>[] = [
-    { as: "a", content: "Entrar", href: "/login" },
+    { as: "a", content: "Entrar", href: "/entrar" },
     {
       as: "a",
       content: "Registrar",
-      href: "/register",
+      href: "/registrar",
       buttonType: "SECONDARY"
     }
   ];
 
   useEffect(() => {
-    setMustShowRegisterLinks(window.location.pathname === "/");
-  }, []);
+    setMustShowRegisterLinks(pathname === "/");
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 border-b-1 border-primary">
@@ -30,17 +33,21 @@ const Header = () => {
           <h1 className="font-montserrat font-semibold ">Owl Habit Tracker</h1>
         </Link>
         {mustShowRegisterLinks && (
-          <nav className="max-[550]:w-full">
+          <nav aria-label="Links de Autenticação" className="max-[550]:w-full">
             <ul className="flex gap-4">
               {navLinks.map((link, index) => (
                 <li key={index} className="flex-1">
-                  <Button {...link} className="w-full" />
+                  <Button
+                    {...link}
+                    className="w-full"
+                    aria-label={`Navegar para tela de ${link.content}`}
+                  />
                 </li>
               ))}
             </ul>
           </nav>
         )}
-      </div>{" "}
+      </div>
     </header>
   );
 };
