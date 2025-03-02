@@ -1,0 +1,69 @@
+{
+  "name": "habit-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "dev:mocked-api": "MUST_MOCK_API=true next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.6.0",
+    "next": "15.1.7",
+    "nookies": "^2.5.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.4",
+    "@eslint/eslintrc": "^3",
+    "@storybook/addon-essentials": "^8.5.8",
+    "@storybook/addon-interactions": "^8.5.8",
+    "@storybook/addon-onboarding": "^8.5.8",
+    "@storybook/blocks": "^8.5.8",
+    "@storybook/nextjs": "^8.5.8",
+    "@storybook/react": "^8.5.8",
+    "@storybook/test": "^8.5.8",
+    "@tailwindcss/postcss": "^4.0.8",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-istanbul": "^3.0.6",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7",
+    "eslint-plugin-storybook": "^0.11.3",
+    "jsdom": "^26.0.0",
+    "msw": "^2.7.3",
+    "postcss": "^8",
+    "prettier": "^3.5.1",
+    "storybook": "^8.5.8",
+    "tailwindcss": "^4.0.8",
+    "typescript": "^5",
+    "vitest": "^3.0.6"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}
