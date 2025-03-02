@@ -6,9 +6,6 @@ extendZodWithOpenApi(z);
 
 export const updateLogSchema = z
   .object({
-    habitId: z.string().optional().openapi({
-      example: "fake-habit-uuid"
-    }),
     status: z.nativeEnum(HabitStatus).openapi({
       example: HabitStatus.COMPLETED,
       description: "Status of the habit"
