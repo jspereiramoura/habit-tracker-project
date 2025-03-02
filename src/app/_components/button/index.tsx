@@ -29,6 +29,7 @@ export default function Button({
 }: ButtonPropsWithRoot) {
   const buttonDefaultClasses = `
   ${defaultProps.className ?? ""}
+  cursor-pointer
   block h-11 leading-11 text-center
   px-6 font-semibold rounded-lg
   ${buttonStyleStrategy[buttonType]}
