@@ -1,7 +1,10 @@
 /** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
-    "@tailwindcss/postcss": {}
+    // @TODO: try to solve vercel build error
+    "@tailwindcss/postcss": {
+      optimize: { minify: false }
+    }
   }
 };
 
