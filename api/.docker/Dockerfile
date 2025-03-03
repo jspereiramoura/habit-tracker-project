@@ -1,10 +1,12 @@
-FROM node:20-alpine AS deps
+FROM node:20-alpine AS base
+
+FROM base AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
 
-FROM node:20-alpine AS builder
+FROM base AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
@@ -13,10 +15,11 @@ ENV NODE_ENV=production
 RUN npm ci --only=production && npm cache clean --force
 
 
-FROM node:20-alpine AS production
+FROM base AS production
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 USER node
 EXPOSE 3000
-CMD ["node", "dist/main"]
+
+CMD npx typeorm migration:run -d dist/config/db/datasource.js && node dist/main.js
