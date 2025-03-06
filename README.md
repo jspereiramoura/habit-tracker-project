@@ -1,12 +1,12 @@
 
 <div align="center"><img src=".assets/Owl.png"/></div>
-<h1 align="center">Owl Habit Tracking</h1>
+<h1 align="center">Owl Habit Tracker</h1>
 
 <p align="center">A javascript habit tracker project.</p>
 
 <p align="center">
     <a href="#installing">Installing</a> •
-    <a href="#used-techs">Used Technologies</a> •
+    <a href="#tools-and-technologies">Used Technologies</a> •
     <a href="#author">Author</a>
 </p>
 
@@ -19,7 +19,6 @@
   <img src=".assets/screenshots/habit_page.png" />
 </details>
 
-
 <h3 id="installing">Installing</h3>
 
 The easiest way to run this project locally is cloning this repository and run the `make up` command. You will need to install Make, Docker and Docker Compose.
@@ -27,10 +26,11 @@ The easiest way to run this project locally is cloning this repository and run t
 ```bash
 $ git clone git@github.com:jspereiramoura/habit-tracker-project.git
 $ cd habit-tracker-project
+$ make replace-env
 $ make up
 ```
 
-Alternatively, you can run the projects with node using the commands `make dev-up-{projectName}`, but you need to provide a Postgres database to run the API (e.g. using `make dev-up-db`).
+Alternatively, you can run the projects with node using the commands `make replace-dev-env` and `make dev-up-{projectName}`, but you need to provide a Postgres database to run the API (e.g. using `make dev-up-db`).
 
 ---
 
