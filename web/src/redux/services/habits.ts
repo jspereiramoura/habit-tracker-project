@@ -29,10 +29,7 @@ export const habitsApi = createApi({
   }),
   tagTypes: ["Habit", "HabitLogs"],
   endpoints: builder => ({
-    getHabits: builder.query<
-      Record<"all" | "completed" | "uncompleted", Habit[]>,
-      void
-    >({
+    getHabits: builder.query<Habit[], void>({
       query: () => "/",
       providesTags: ["Habit"]
     }),
