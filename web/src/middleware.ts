@@ -12,7 +12,9 @@ export function middleware(request: NextRequest) {
 
   if (
     token &&
-    (pathname.startsWith("/entrar") || pathname.startsWith("/registrar"))
+    (pathname === "/" ||
+      pathname.startsWith("/entrar") ||
+      pathname.startsWith("/registrar"))
   ) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
