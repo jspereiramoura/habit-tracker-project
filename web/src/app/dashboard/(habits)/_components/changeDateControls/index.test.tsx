@@ -36,7 +36,9 @@ describe("ChangeDateControls", () => {
     const onChangeDate = vi.fn();
     renderTest({ onChangeDate });
 
-    const previousButton = screen.getByRole("button", { name: /dia anterior/i });
+    const previousButton = screen.getByRole("button", {
+      name: /dia anterior/i
+    });
     previousButton.click();
 
     expect(onChangeDate).toHaveBeenCalledWith(new Date(2025, 3, 1));
@@ -56,9 +58,18 @@ describe("ChangeDateControls", () => {
     const addNewHabit = vi.fn();
     renderTest({ addNewHabit });
 
-    const addButton = screen.getByRole("button", { name: /adicionar novo hábito/i });
+    const addButton = screen.getByRole("button", {
+      name: /adicionar novo hábito/i
+    });
     addButton.click();
 
     expect(addNewHabit).toHaveBeenCalled();
+  });
+
+  it("should disable next button when current date is today", () => {
+    renderTest({ currentDate: new Date() });
+
+    const nextButton = screen.getByRole("button", { name: /próximo dia/i });
+    expect(nextButton).toBeDisabled();
   });
 });

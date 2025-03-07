@@ -7,17 +7,20 @@ import Tooltip from "../../../../_components/tooltip";
 const Button = ({
   children,
   onClick,
-  supportText
+  supportText,
+  disabled
 }: {
   onClick?: VoidFunction;
   supportText: string;
   children: React.ReactNode;
+  disabled?: boolean;
 }) => (
   <Tooltip text={supportText}>
     <button
       onClick={onClick}
       aria-label={supportText}
-      className="group p-1 rounded-lg bg-primary text-white cursor-pointer hover:bg-primary--hovered relative"
+      className="group p-1 rounded-lg bg-primary text-white cursor-pointer hover:bg-primary--hovered relative disabled:bg-gray-300 disabled:cursor-auto"
+      disabled={disabled}
     >
       {children}
     </button>
@@ -70,6 +73,7 @@ export default function ChangeDateControls({
         onClick={() => {
           handleChangeDate("NEXT");
         }}
+        disabled={currentDate.getDate() >= new Date().getDate()}
       >
         {buttonIcons.NEXT}
       </Button>
