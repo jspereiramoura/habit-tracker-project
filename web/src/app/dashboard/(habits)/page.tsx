@@ -29,10 +29,7 @@ export default function HabitPage() {
   };
 
   return (
-    <section
-      aria-label="Painel de Hábitos"
-      className="flex flex-col h-dvh w-full p-5 gap-5 bg-gray-100 overflow-y-scroll"
-    >
+    <>
       <Section title="Olá, " subtitle="bem-vindo de volta!"></Section>
       <Section
         title={parsedDate.dayOfWeek}
@@ -58,6 +55,6 @@ export default function HabitPage() {
           />
         </Section>
       ) : null}
-    </section>
+    </>
   );
 }

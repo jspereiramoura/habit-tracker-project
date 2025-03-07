@@ -18,7 +18,7 @@ export default function DashboardLayout({
       overflow-x-hidden
     ">
       <Sidebar className="flex-none" />
-      <div className="flex-grow">
+      <div className="flex-grow flex flex-col h-dvh  w-full p-5 gap-5 bg-gray-100">
         {children}
       </div>
     </main>
