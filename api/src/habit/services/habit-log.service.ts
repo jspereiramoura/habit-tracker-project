@@ -27,7 +27,8 @@ export class HabitLogService {
     });
 
     const habits = await this.habitRepository.find({
-      where: { user: { uuid: userId } }
+      where: { user: { uuid: userId } },
+      relations: ["user"]
     });
 
     const missingLogs = habits
