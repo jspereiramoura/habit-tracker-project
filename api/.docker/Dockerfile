@@ -20,6 +20,5 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 USER node
-EXPOSE 3000
 
 CMD npx typeorm migration:run -d dist/config/db/datasource.js && node dist/main.js
