@@ -25,6 +25,8 @@
 }
 
 @theme {
+  --default-font-family: var(--font-roboto);
+  --font-montserrat: var(--font-roboto);
   --font-montserrat: var(--font-montserrat);
   --color-primary: #de483a;
   --color-primary--hovered: #cf3520;

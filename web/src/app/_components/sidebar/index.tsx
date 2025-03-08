@@ -8,6 +8,7 @@ import LogoIcon from "../icons/Logo";
 import SidebarIcon from "../icons/SidebarIcon";
 import Button from "../button";
 import { doLogout } from "../../../utils/doLogout";
+import StatisticsIcon from "../icons/StatisticsIcon";
 
 const navLinks: {
   name: string;
@@ -18,13 +19,12 @@ const navLinks: {
     name: "Todos Hábitos",
     href: "/dashboard",
     icon: <ListIcon />
+  },
+  {
+    name: "Estatísticas",
+    href: "/dashboard/statistics",
+    icon: <StatisticsIcon />
   }
-  // TODO: Implementar a página de estatísticas
-  // {
-  //   name: "Estatísticas",
-  //   href: "/dashboard/statistics",
-  //   icon: <StatisticsIcon />
-  // }
 ];
 
 export default function Sidebar({ className }: { className?: string }) {

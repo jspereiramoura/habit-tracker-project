@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "../../config/api";
+import prepareHeadersWithAuth from "../../utils/prepareHeadersWithAuth";
 
 interface NewHabit {
   name: string;
@@ -7,25 +8,11 @@ interface NewHabit {
   description?: string;
 }
 
-const getCookie = (name: string): string | null => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
-  return null;
-};
-
 export const habitsApi = createApi({
   reducerPath: "habitsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${API_URL}/habits`,
-    prepareHeaders: headers => {
-      const token = getCookie("token");
-
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    }
+    prepareHeaders: prepareHeadersWithAuth
   }),
   tagTypes: ["Habit", "HabitLogs"],
   endpoints: builder => ({

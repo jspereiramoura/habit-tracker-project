@@ -5,7 +5,11 @@ import ReduxProvider from "../redux/provider";
 import "./globals.css";
 import Modal from "./_components/modal";
 
-const roboto = Roboto({ weight: ["400", "500"], subsets: ["latin"] });
+const roboto = Roboto({
+  weight: ["400", "500"],
+  subsets: ["latin"],
+  variable: "--font-roboto"
+});
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat"
@@ -17,9 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
-        className={`${montserrat.variable} ${roboto.className} overflow-x-hidden`}
+        className={`${montserrat.variable} ${roboto.variable} overflow-x-hidden`}
       >
         <MSWConfig>
           <ReduxProvider>
