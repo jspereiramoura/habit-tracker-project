@@ -15,7 +15,7 @@ const Input = ({ errorMessage, ...props }: InputProps) => {
         }
         className={`
           ${props.className ?? ""}
-          border border-gray-300 rounded-lg p-2  
+          border border-gray-300 rounded-lg p-2 disabled:bg-gray-50 disabled:cursor-not-allowed
         `}
       />
       {errorMessage && (

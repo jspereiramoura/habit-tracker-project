@@ -17,8 +17,8 @@ type ButtonTypes = "PRIMARY" | "SECONDARY";
 type ButtonPropsWithRoot = ButtonRootProps & (ButtonProps | ButtonLinkProps);
 
 export const buttonStyleStrategy: Record<ButtonTypes, string> = {
-  PRIMARY: "bg-primary text-white hover:bg-primary--hovered",
-  SECONDARY: "bg-white text-primary border-1 border-primary hover:underline"
+  PRIMARY: "bg-primary text-white hover:bg-primary--hovered disabled:cursor-not-allowed",
+  SECONDARY: "bg-white text-primary border-1 border-primary hover:underline disabled:cursor-not-allowed"
 };
 
 export default function Button({
