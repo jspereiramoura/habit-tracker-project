@@ -114,6 +114,7 @@ describe("AuthService", () => {
       mockUsersService.createUser.mockResolvedValueOnce(mockedUser);
 
       mockPasswordEncoderService.hashPassword.mockResolvedValueOnce("test");
+      mockJwtService.sign.mockReturnValueOnce("test");
 
       const user = await service.signUp({
         mail: "test",
@@ -122,9 +123,12 @@ describe("AuthService", () => {
       });
 
       expect(user).toStrictEqual({
-        uuid: mockedUser.uuid,
-        mail: mockedUser.mail,
-        username: mockedUser.username
+        user: {
+          uuid: mockedUser.uuid,
+          mail: mockedUser.mail,
+          username: mockedUser.username
+        },
+        access_token: "test"
       });
     });
   });

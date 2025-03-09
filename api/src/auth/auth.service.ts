@@ -6,12 +6,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { Users } from "../users/users.entity";
 import { UsersService } from "../users/users.service";
-import {
-  SignInDTO,
-  SignInOutputDTO,
-  SignUpDTO,
-  SignUpOutputDTO
-} from "./auth.dto";
+import { AuthOutputDTO, SignInDTO, SignUpDTO } from "./auth.dto";
 import { PasswordEncoderService } from "./password-encoder/password-encoder.service";
 
 @Injectable()
@@ -42,16 +37,15 @@ export class AuthService {
     return this.usersService.findByUsername(userDto.username);
   }
 
-  async signIn(userDto: SignInDTO): Promise<SignInOutputDTO> {
+  async signIn(userDto: SignInDTO): Promise<AuthOutputDTO> {
     const user = await this.validateUser(userDto);
     if (!user) throw new UnauthorizedException("Invalid Credentials");
 
-    const payload = {
+    const token = this.jwtService.sign({
       sub: user.uuid,
       username: user.username,
       email: user.mail
-    };
-    const token = this.jwtService.sign(payload);
+    });
 
     return {
       user: {
@@ -63,7 +57,7 @@ export class AuthService {
     };
   }
 
-  async signUp(userDto: SignUpDTO): Promise<SignUpOutputDTO> {
+  async signUp(userDto: SignUpDTO): Promise<AuthOutputDTO> {
     let user: Users | null;
 
     user = await this.usersService.findByMail(userDto.mail);
@@ -78,10 +72,19 @@ export class AuthService {
       hash: await this.passwordEncoderService.hashPassword(userDto.password)
     });
 
+    const token = this.jwtService.sign({
+      sub: output.uuid,
+      username: output.username,
+      email: output.mail
+    });
+
     return {
-      uuid: output.uuid,
-      mail: output.mail,
-      username: output.username
+      user: {
+        uuid: output.uuid,
+        mail: output.mail,
+        username: output.username
+      },
+      access_token: token
     };
   }
 }

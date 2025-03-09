@@ -26,22 +26,7 @@ export const signInSchema = z
   })
   .openapi("SignInObject");
 
-export class SignUpOutputDTO {
-  @ApiResponseProperty({
-    example: "123e4567-e89b-12d3-a456-426614174000"
-  })
-  uuid: UUIDTypes;
-  @ApiResponseProperty({
-    example: "some@email.test"
-  })
-  mail: string;
-  @ApiResponseProperty({
-    example: "john_doe"
-  })
-  username: string;
-}
-
-export class SignInOutputDTO {
+export class AuthOutputDTO {
   @ApiResponseProperty({
     example: {
       uuid: "123e4567-e89b-12d3-a456-426614174000",
