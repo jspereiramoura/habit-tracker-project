@@ -7,7 +7,7 @@ steps:
     image: alpine/git
     commands:
       - git clone --depth=1 "${DRONE_REPO_LINK}"
-      - if (git diff --exit-code $DRONE_COMMIT_BEFORE $DRONE_COMMIT_AFTER -- web); then exit 78; fi
+      - .cicd/scripts/must_continue_pipeline.sh web
 
   - name: Install Dependencies
     image: node:23-alpine
