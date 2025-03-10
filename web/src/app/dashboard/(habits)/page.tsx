@@ -1,23 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { useGetHabitLogsQuery } from "../../../redux/services/habits";
+import { setDate } from "../../../redux/slices/dashboardSlice";
 import { openModal } from "../../../redux/slices/modalSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/storeHooks";
 import parseDate from "../../../utils/parseDate";
+import { ModalBodyTypes } from "../../_components/modal/enum";
 import Section from "../../_components/section";
 import ChangeDateControls from "./_components/changeDateControls";
 import HabitLogList from "./_components/habtiList";
-import { useAppDispatch } from "../../../redux/storeHooks";
-import { ModalBodyTypes } from "../../_components/modal/enum";
 
 export default function HabitPage() {
   const dispatch = useAppDispatch();
+  const { selectedDate } = useAppSelector(state => state.dashboard);
+  
+  const unparsedDate = new Date(selectedDate);
+  const parsedDate = parseDate(unparsedDate);
 
-  const [date, setDate] = useState(new Date());
-  const parsedDate = parseDate(date);
-  const { data: habitLogs } = useGetHabitLogsQuery(
-    `${date.getUTCFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-  );
+  const { data: habitLogs } = useGetHabitLogsQuery(selectedDate);
+  
+  const parsedHabits = useMemo(() => {
+    return {
+      completed: habitLogs?.filter(
+        (habit: HabitLog) => habit.status === "completed"
+      ),
+      uncompleted: habitLogs?.filter(
+        (habit: HabitLog) => habit.status === "missed"
+      )
+    }
+  }, [habitLogs]);
 
   const openAddHabitModal = () => {
     dispatch(
@@ -37,20 +49,20 @@ export default function HabitPage() {
         className="flex-grow relative"
       >
         <ChangeDateControls
-          currentDate={date}
+          currentDate={unparsedDate}
           className="absolute right-4 top-4"
           addNewHabit={openAddHabitModal}
-          onChangeDate={newDate => setDate(newDate)}
+          onChangeDate={newDate => dispatch(setDate(newDate))}
         />
         <HabitLogList
-          logs={habitLogs?.uncompleted ?? []}
+          logs={parsedHabits?.uncompleted ?? []}
           ariaLabel="Lista de hábitos Incompletos"
         />
       </Section>
-      {habitLogs?.completed?.length ? (
+      {parsedHabits?.completed?.length ? (
         <Section title="Hábitos Concluídos">
           <HabitLogList
-            logs={habitLogs?.completed ?? []}
+            logs={parsedHabits?.completed ?? []}
             ariaLabel="Lista de hábitos completos"
           />
         </Section>

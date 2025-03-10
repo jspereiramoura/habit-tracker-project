@@ -108,17 +108,8 @@ describe("Services: Habits", () => {
       predicate => predicate.date === "2025-02-28"
     );
 
-    const completedMock = filteredByDate.filter(
-      predicate => predicate.status === "completed"
-    );
-    const uncompletedMock = filteredByDate.filter(
-      predicate => predicate.status === "missed"
-    );
-
     await waitFor(() => {
-      expect(result.current.data?.all).toEqual(filteredByDate);
-      expect(result.current.data?.completed).toEqual(completedMock);
-      expect(result.current.data?.uncompleted).toEqual(uncompletedMock);
+      expect(result.current.data).toEqual(filteredByDate);
     });
   });
 

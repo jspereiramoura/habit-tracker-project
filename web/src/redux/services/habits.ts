@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "../../config/api";
 import prepareHeadersWithAuth from "../../utils/prepareHeadersWithAuth";
+import { RootState } from "../store";
 
 interface NewHabit {
   name: string;
@@ -41,25 +42,31 @@ export const habitsApi = createApi({
         url: `/${id}`,
         method: "DELETE"
       }),
-      invalidatesTags: ["Habit", "HabitLogs"]
-    }),
-    getHabitLogs: builder.query<
-      Record<"all" | "completed" | "uncompleted", HabitLog[]>,
-      string
-    >({
-      query: date => `/logs/?date=${date}`,
-      providesTags: ["HabitLogs"],
-      transformResponse: (response: HabitLog[]) => {
-        return {
-          all: response,
-          completed: response?.filter(
-            (habit: HabitLog) => habit.status === "completed"
-          ),
-          uncompleted: response?.filter(
-            (habit: HabitLog) => habit.status === "missed"
+      async onQueryStarted(id, { dispatch, getState, queryFulfilled }) {
+        const state = getState() as RootState;
+        const dashboardDate = state.dashboard.selectedDate;
+
+        const patchResult = dispatch(
+          habitsApi.util.updateQueryData(
+            "getHabitLogs",
+            dashboardDate,
+            draft => {
+              const newDraft = draft.filter(log => log.habitId !== id);
+              return newDraft;
+            }
           )
-        };
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
       }
+    }),
+    getHabitLogs: builder.query<HabitLog[], string>({
+      query: date => `/logs/?date=${date}`,
+      providesTags: ["HabitLogs"]
     }),
     updateHabitLog: builder.mutation<HabitLog, Partial<HabitLog>>({
       invalidatesTags: ["HabitLogs"],
@@ -67,7 +74,28 @@ export const habitsApi = createApi({
         url: `/logs/${id}`,
         method: "PATCH",
         body: updatedData
-      })
+      }),
+      async onQueryStarted({ ...updatedData }, { dispatch, getState }) {
+        const state = getState() as RootState;
+        const dashboardDate = state.dashboard.selectedDate;
+
+        dispatch(
+          habitsApi.util.updateQueryData(
+            "getHabitLogs",
+            dashboardDate,
+            draft => {
+              const habitLogIndex = draft.findIndex(
+                log => log.id === updatedData.id
+              );
+
+              draft[habitLogIndex] = {
+                ...draft[habitLogIndex],
+                ...updatedData
+              };
+            }
+          )
+        );
+      }
     })
   })
 });
