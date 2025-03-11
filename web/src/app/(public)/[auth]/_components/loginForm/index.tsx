@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { setCookie } from "nookies";
 import { useState } from "react";
 import { z } from "zod";
 import {
@@ -13,6 +12,7 @@ import Button from "../../../../_components/button";
 import Input from "../../../../_components/input";
 import { errorModalTexts, loginErrorMessages } from "./errorMessages";
 import { useAppDispatch } from "../../../../../redux/storeHooks";
+import setCookie from "../../../../../utils/setCookie";
 
 const loginSchema = z.object({
   username: z.string().nonempty(loginErrorMessages.EMPTY_USER),
@@ -66,7 +66,7 @@ export default function LoginForm({ isLogin }: { isLogin: boolean }) {
         openErrorModal((response.error as { status: number })?.status === 401);
         return;
       }
-      setCookie(null, "token", response.data.access_token);
+      setCookie("token", response.data.access_token);
       router.push("/dashboard");
     } catch (error) {
       if (error instanceof z.ZodError) {
