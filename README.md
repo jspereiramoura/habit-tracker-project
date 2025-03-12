@@ -1,8 +1,8 @@
 
 <div align="center"><img src=".assets/Owl.png"/></div>
 <h1 align="center">Owl Habit Tracker</h1>
-
 <p align="center">A javascript habit tracker project.</p>
+<h3 align="center"><a href="https://apps.habits.jspereiramoura.dev.br">Live Preview</a></h3>
 
 <p align="center">
     <a href="#installing">Installing</a> •
