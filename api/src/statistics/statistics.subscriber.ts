@@ -7,14 +7,19 @@ import {
   EventSubscriber,
   InsertEvent,
   Not,
-  RemoveEvent,
   UpdateEvent
 } from "typeorm";
+import { UUIDTypes } from "uuid";
 import { HabitLog } from "../habit/entities/habit-log.entity";
 import { HabitStatus } from "../habit/entities/habit-status.enum";
 import { HabitStatistics } from "./habit/habit-statistics.entity";
 
-type ParsedEvent = { manager: EntityManager; entity: HabitLog };
+type EventType = "INSERT" | "UPDATE";
+type ParsedEvent = {
+  eventType: EventType;
+  manager: EntityManager;
+  entity: HabitLog;
+};
 
 @Injectable()
 @EventSubscriber()
@@ -31,20 +36,16 @@ export class HabitLogSubscriber implements EntitySubscriberInterface<HabitLog> {
   }
 
   async afterInsert(event: InsertEvent<HabitLog>) {
-    await this.updateHabitStatistics(event);
+    await this.updateHabitStatistics({ ...event, eventType: "INSERT" });
   }
 
   async afterUpdate(event: UpdateEvent<HabitLog>) {
     if (event.entity) {
-      const parsedEvent = { ...event, entity: event.entity as HabitLog };
-      await this.updateHabitStatistics(parsedEvent);
-    }
-  }
-
-  async afterRemove(event: RemoveEvent<HabitLog>) {
-    if (event.entity) {
-      const parsedEvent = { entity: event.entity, manager: event.manager };
-      await this.updateHabitStatistics(parsedEvent);
+      await this.updateHabitStatistics({
+        ...event,
+        entity: event.entity as HabitLog,
+        eventType: "UPDATE"
+      });
     }
   }
 
@@ -52,25 +53,97 @@ export class HabitLogSubscriber implements EntitySubscriberInterface<HabitLog> {
     return itemsLength ? (completed / itemsLength) * 100 : 0;
   }
 
-  private async updateHabitStatistics({ manager, entity }: ParsedEvent) {
-    const habitId = entity?.habitId;
-    const totalLogs = await manager.getRepository(HabitLog).countBy({
+  private async getTotalLogs(manager: EntityManager, habitId: UUIDTypes) {
+    return await manager.getRepository(HabitLog).countBy({
       habit: { id: habitId }
     });
+  }
 
-    const completedLogs = await manager.getRepository(HabitLog).countBy({
+  private async getCompletedLogs(manager: EntityManager, habitId: UUIDTypes) {
+    return await manager.getRepository(HabitLog).countBy({
       habit: { id: habitId },
       status: HabitStatus.COMPLETED
     });
+  }
 
+  private async getHabitStatistics(manager: EntityManager, habitId: UUIDTypes) {
     let habitStats = await manager.getRepository(HabitStatistics).findOne({
       where: { habit: { id: habitId } }
     });
+
     if (!habitStats) {
       habitStats = manager
         .getRepository(HabitStatistics)
         .create({ habit: { id: habitId } });
     }
+
+    return habitStats;
+  }
+
+  private async retrieveLastHabitLogWithDifferentId(
+    manager: EntityManager,
+    habitLogId: UUIDTypes
+  ) {
+    return await manager.getRepository(HabitLog).findOne({
+      where: {
+        id: Not(habitLogId),
+        habit: { id: habitLogId }
+      },
+      order: { date: "DESC" }
+    });
+  }
+
+  private async findLastStatus(
+    habitLogId: UUIDTypes
+  ): Promise<Pick<HabitLog, "status"> | null> {
+    return await this.dataSource.manager.getRepository(HabitLog).findOne({
+      where: { id: habitLogId },
+      select: ["status"]
+    });
+  }
+
+  private async updateHabitStreaks(
+    eventType: string,
+    entity: HabitLog,
+    manager: EntityManager,
+    habitStats: HabitStatistics
+  ) {
+    const lastStatus = await this.findLastStatus(entity.id);
+    const lastHabitLog = await this.retrieveLastHabitLogWithDifferentId(
+      manager,
+      entity.id
+    );
+
+    const isCompleted = entity.status === HabitStatus.COMPLETED;
+    const isLastCompleted = lastStatus?.status === HabitStatus.COMPLETED;
+
+    if (lastHabitLog?.status === HabitStatus.MISSED) {
+      habitStats.streakCurrent = 0;
+    }
+
+    if (isCompleted) {
+      habitStats.streakCurrent++;
+    } else if (isLastCompleted && eventType !== "INSERT") {
+      habitStats.streakCurrent--;
+      if (!lastHabitLog || lastHabitLog?.status === HabitStatus.COMPLETED) {
+        habitStats.streakLongest--;
+      }
+    }
+
+    if (habitStats.streakCurrent > habitStats.streakLongest) {
+      habitStats.streakLongest = habitStats.streakCurrent;
+    }
+  }
+
+  private async updateHabitStatistics({
+    eventType,
+    manager,
+    entity
+  }: ParsedEvent) {
+    const habitId = entity?.habitId;
+    const totalLogs = await this.getTotalLogs(manager, habitId);
+    const completedLogs = await this.getCompletedLogs(manager, habitId);
+    const habitStats = await this.getHabitStatistics(manager, habitId);
 
     habitStats.totalLogs = totalLogs;
     habitStats.completedLogs = completedLogs;
@@ -78,26 +151,7 @@ export class HabitLogSubscriber implements EntitySubscriberInterface<HabitLog> {
     habitStats.streakCurrent ??= 0;
     habitStats.streakLongest ??= 0;
 
-    const latestHabitLog = await manager.getRepository(HabitLog).findOne({
-      where: {
-        id: Not(entity.id),
-        habit: { id: habitId }
-      },
-      order: { date: "DESC" }
-    });
-
-    if (latestHabitLog?.status === HabitStatus.MISSED) {
-      habitStats.streakCurrent = 0;
-    }
-
-    if (entity?.status === HabitStatus.COMPLETED) {
-      habitStats.streakCurrent++;
-    }
-
-    if (habitStats.streakCurrent > habitStats.streakLongest) {
-      habitStats.streakLongest = habitStats.streakCurrent;
-    }
-
+    await this.updateHabitStreaks(eventType, entity, manager, habitStats);
     await manager.getRepository(HabitStatistics).save(habitStats);
   }
 }

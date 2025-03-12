@@ -53,9 +53,9 @@ describe("HabitLogSubscriber", () => {
     expect(subscriber.listenTo()).toBe(HabitLog);
   });
 
-  it.each(["afterInsert", "afterUpdate", "afterRemove"])(
+  it.each(["afterInsert", "afterUpdate"])(
     "should update habit statistics on %s a new habit log",
-    async (eventType: "afterInsert" | "afterUpdate" | "afterRemove") => {
+    async (eventType: "afterInsert" | "afterUpdate") => {
       const event = {
         ...mockDataSource,
         entity: { id: 1, habitId: 1, status: "MISSED" }
@@ -128,6 +128,9 @@ describe("HabitLogSubscriber", () => {
     mockedHabitLogRepository.findOne.mockResolvedValueOnce({
       status: HabitStatus.COMPLETED
     });
+    mockedHabitLogRepository.findOne.mockResolvedValueOnce({
+      status: HabitStatus.COMPLETED
+    });
     mockedHabitStatisticsRepository.findOne.mockResolvedValueOnce(
       mockedHabitStatistics
     );
@@ -153,6 +156,9 @@ describe("HabitLogSubscriber", () => {
     mockedHabitLogRepository.findOne.mockResolvedValueOnce({
       status: HabitStatus.MISSED
     });
+    mockedHabitLogRepository.findOne.mockResolvedValueOnce({
+      status: HabitStatus.MISSED
+    });
     mockedHabitStatisticsRepository.findOne.mockResolvedValueOnce(
       mockedHabitStatistics
     );
@@ -175,6 +181,9 @@ describe("HabitLogSubscriber", () => {
     };
     mockedHabitLogRepository.countBy.mockResolvedValueOnce(5);
     mockedHabitLogRepository.countBy.mockResolvedValueOnce(3);
+    mockedHabitLogRepository.findOne.mockResolvedValueOnce({
+      status: HabitStatus.COMPLETED
+    });
     mockedHabitLogRepository.findOne.mockResolvedValueOnce({
       status: HabitStatus.COMPLETED
     });
