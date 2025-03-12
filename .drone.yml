@@ -60,6 +60,10 @@ steps:
 
   - name: Send Telegram Notification
     image: appleboy/drone-telegram
+    when:
+      status:
+        - success
+        - failure
     depends_on:
       - Deploy
     settings:
@@ -137,6 +141,10 @@ steps:
     image: appleboy/drone-telegram
     depends_on:
       - Deploy
+    when:
+      status:
+        - success
+        - failure
     settings:
       token:
         from_secret: TELEGRAM_TOKEN
