@@ -8,17 +8,12 @@ import {
 } from "../../../../../redux/services/auth";
 import { renderWithProviders } from "../../../../../test/utils/renderWithProviders";
 import { errorModalTexts, loginErrorMessages } from "./errorMessages";
-import { setCookie } from "nookies";
 import { useRouter } from "next/navigation";
 import * as modalSlice from "../../../../../redux/slices/modalSlice";
+import setCookie from "../../../../../utils/setCookie";
 
 vi.mock("../../../../../redux/services/auth.ts", { spy: true });
-vi.mock("nookies", importOriginal => {
-  return {
-    ...importOriginal(),
-    setCookie: vi.fn()
-  };
-});
+vi.mock("../../../../../utils/setCookie.ts", { spy: true });
 
 const fieldNames = {
   username: /nome de usuário/i,
@@ -193,7 +188,7 @@ describe("Components: LoginForm", () => {
     await user.click(submitButton);
 
     expect(pushSpy).toHaveBeenCalledWith("/dashboard");
-    expect(setCookie).toHaveBeenCalledWith(null, "token", "mocked_token");
+    expect(setCookie).toHaveBeenCalledWith("token", "mocked_token");
   });
 
   it.each`
