@@ -4,7 +4,7 @@ import {
   UnauthorizedException
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { LessThanOrEqual, Repository } from "typeorm";
 import { UUIDTypes } from "uuid";
 import { UpdateLogDto } from "../dto/habit-log.dto";
 import { HabitLog } from "../entities/habit-log.entity";
@@ -26,8 +26,14 @@ export class HabitLogService {
       relations: ["habit"]
     });
 
+    const dateFilterOffset = new Date(date);
+    dateFilterOffset.setHours(23, 59, 59, 999);
+
     const habits = await this.habitRepository.find({
-      where: { user: { uuid: userId } },
+      where: {
+        user: { uuid: userId },
+        createdAt: LessThanOrEqual(dateFilterOffset)
+      },
       relations: ["user"]
     });
 
