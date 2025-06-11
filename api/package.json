@@ -40,7 +40,7 @@
     "pg": "^8.13.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20",
+    "typeorm": "^0.3.11",
     "uuid": "^11.1.0",
     "zod": "^3.24.2"
   },
@@ -50,7 +50,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
-    "@swc/cli": "^0.6.0",
+    "@swc/cli": "^0.1.63",
     "@swc/core": "^1.10.7",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
@@ -72,6 +72,6 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^7.3.1"
   }
 }
