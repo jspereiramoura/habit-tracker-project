@@ -14,7 +14,7 @@ export class HabitStatisticsService {
 
   async findAllByUserId(userId: UUIDTypes): Promise<HabitStatisticDto[]> {
     const searchedEntities = await this.habitStatisticRepository.find({
-      where: { habit: { user: { uuid: userId } } },
+      where: { habit: { user: { uuid: userId.toString() } } },
       relations: ["habit"]
     });
 

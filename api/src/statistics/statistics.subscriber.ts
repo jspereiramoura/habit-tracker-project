@@ -55,26 +55,26 @@ export class HabitLogSubscriber implements EntitySubscriberInterface<HabitLog> {
 
   private async getTotalLogs(manager: EntityManager, habitId: UUIDTypes) {
     return await manager.getRepository(HabitLog).countBy({
-      habit: { id: habitId }
+      habit: { id: habitId.toString() }
     });
   }
 
   private async getCompletedLogs(manager: EntityManager, habitId: UUIDTypes) {
     return await manager.getRepository(HabitLog).countBy({
-      habit: { id: habitId },
+      habit: { id: habitId.toString() },
       status: HabitStatus.COMPLETED
     });
   }
 
   private async getHabitStatistics(manager: EntityManager, habitId: UUIDTypes) {
     let habitStats = await manager.getRepository(HabitStatistics).findOne({
-      where: { habit: { id: habitId } }
+      where: { habit: { id: habitId.toString() } }
     });
 
     if (!habitStats) {
       habitStats = manager
         .getRepository(HabitStatistics)
-        .create({ habit: { id: habitId } });
+        .create({ habit: { id: habitId.toString() } });
     }
 
     return habitStats;
@@ -86,8 +86,8 @@ export class HabitLogSubscriber implements EntitySubscriberInterface<HabitLog> {
   ) {
     return await manager.getRepository(HabitLog).findOne({
       where: {
-        id: Not(habitLogId),
-        habit: { id: habitLogId }
+        id: Not(habitLogId.toString()),
+        habit: { id: habitLogId.toString() }
       },
       order: { date: "DESC" }
     });
@@ -97,7 +97,7 @@ export class HabitLogSubscriber implements EntitySubscriberInterface<HabitLog> {
     habitLogId: UUIDTypes
   ): Promise<Pick<HabitLog, "status"> | null> {
     return await this.dataSource.manager.getRepository(HabitLog).findOne({
-      where: { id: habitLogId },
+      where: { id: habitLogId.toString() },
       select: ["status"]
     });
   }

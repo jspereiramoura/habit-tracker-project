@@ -104,7 +104,7 @@ describe("HabitLogSubscriber", () => {
 
     await expect(subscriber.afterInsert(event as any)).resolves.not.toThrow();
     expect(mockedHabitStatisticsRepository.create).toHaveBeenCalledWith({
-      habit: { id: event.entity.habitId }
+      habit: { id: event.entity.habitId.toString() }
     });
   });
 

@@ -20,7 +20,9 @@ export class HabitService {
   ) {}
 
   async createHabit(userId: UUIDTypes, habit: Habit): Promise<Habit> {
-    const user = await this.userRepository.findOne({ where: { uuid: userId } });
+    const user = await this.userRepository.findOne({
+      where: { uuid: userId.toString() }
+    });
 
     if (!user) throw new UnauthorizedException("User not found");
 
@@ -30,7 +32,7 @@ export class HabitService {
 
   async getHabitsByUser(userId: UUIDTypes): Promise<Habit[]> {
     return await this.habitRepository.find({
-      where: { user: { uuid: userId } }
+      where: { user: { uuid: userId.toString() } }
     });
   }
 
@@ -40,7 +42,7 @@ export class HabitService {
     dto: UpdateHabitDto
   ): Promise<Habit> {
     let habit = await this.habitRepository.findOne({
-      where: { id: habitId },
+      where: { id: habitId.toString() },
       relations: ["user"]
     });
 
@@ -63,8 +65,8 @@ export class HabitService {
 
   async deleteHabit(id: UUIDTypes, userId: UUIDTypes) {
     await this.habitRepository.delete({
-      id,
-      user: { uuid: userId }
+      id: id.toString(),
+      user: { uuid: userId.toString() }
     });
   }
 }

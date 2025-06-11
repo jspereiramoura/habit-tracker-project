@@ -22,7 +22,7 @@ export class HabitLogService {
 
   async generateOrGetLogsForDay(userId: UUIDTypes, date: Date) {
     const logs = await this.habitLogRepository.find({
-      where: { date, habit: { user: { uuid: userId } } },
+      where: { date, habit: { user: { uuid: userId.toString() } } },
       relations: ["habit"]
     });
 
@@ -31,7 +31,7 @@ export class HabitLogService {
 
     const habits = await this.habitRepository.find({
       where: {
-        user: { uuid: userId },
+        user: { uuid: userId.toString() },
         createdAt: LessThanOrEqual(dateFilterOffset)
       },
       relations: ["user"]
@@ -61,7 +61,7 @@ export class HabitLogService {
     dto: UpdateLogDto
   ): Promise<HabitLog> {
     const log = await this.habitLogRepository.findOne({
-      where: { id },
+      where: { id: id.toString() },
       relations: ["habit", "habit.user"]
     });
 
