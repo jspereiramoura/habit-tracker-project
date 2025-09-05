@@ -4,6 +4,7 @@ import MSWConfig from "../context/mswConfig";
 import ReduxProvider from "../redux/provider";
 import "./globals.css";
 import Modal from "./_components/modal";
+import DatadogInit from "./_components/datadogInit";
 
 const roboto = Roboto({
   weight: ["400", "500"],
@@ -27,6 +28,7 @@ export default function RootLayout({
       >
         <MSWConfig>
           <ReduxProvider>
+            <DatadogInit />
             <Modal />
             {children}
           </ReduxProvider>
