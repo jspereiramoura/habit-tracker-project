@@ -2,12 +2,21 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import LoginForm from "./_components/loginForm";
+import { useRef } from "react";
+import useTrackUserInteraction from "@/hooks/useTrackUserInteraction";
 
 export default function LoginPage() {
   const params = useParams();
   const isLogin = params.auth === "entrar";
   const currentPage = isLogin ? "Entrar" : "Registrar";
+  const buttonRef = useRef<HTMLAnchorElement>(null);
   
+   useTrackUserInteraction("click", (event) => {
+    if (buttonRef.current && buttonRef.current.contains(event.target as Node)) {
+      console.log(`${isLogin ? "Login" : "Register"} button clicked!`);
+    }
+  });
+
   return (
     <section
       aria-label={`Sessão de ${isLogin ? "Login" : "Registro"}`}
@@ -18,6 +27,7 @@ export default function LoginPage() {
       <Link
         href={isLogin ? "/registrar" : "/entrar"}
         className="w-full mt-1 text-sm text-gray-800 hover:underline"
+        ref={buttonRef}
       >
         {isLogin
           ? "Para criar uma conta clique aqui."
