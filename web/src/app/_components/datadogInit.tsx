@@ -1,23 +1,33 @@
 "use client";
 
 import { datadogRum } from "@datadog/browser-rum";
+import { datadogLogs } from "@datadog/browser-logs";
 import { useEffect } from "react";
 
 
+
 function initDatadog() {
+    if (typeof window === "undefined") return;
+
+    datadogLogs.init({
+        clientToken: '',
+        site: 'us5.datadoghq.com',
+        forwardErrorsToLogs: true,
+        sessionSampleRate: 100,
+        service: 'habit-tracker-frontend',
+        env: 'production',
+        forwardReports: "all",
+        forwardConsoleLogs: "all"
+    });
+
     datadogRum.init({
-        
         applicationId: '',
         clientToken: '',
-        // `site` refers to the Datadog site parameter of your organization
-        // see https://docs.datadoghq.com/getting_started/site/
         site: 'us5.datadoghq.com',
         service: 'habit-tracker-frontend',
         env: 'production',
-        // Specify a version number to identify the deployed version of your application in Datadog
-        // version: '1.0.0',
         sessionSampleRate: 100,
-        sessionReplaySampleRate: 20,
+        sessionReplaySampleRate: 50,
         trackBfcacheViews: true,
         defaultPrivacyLevel: 'mask-user-input',
         trackUserInteractions: true,
@@ -36,7 +46,7 @@ export default function DatadogInit() {
     useEffect(() => {
         initDatadog();
         console.log("Datadog RUM initialized");
-        
+
     }, [])
     return null;
 }
