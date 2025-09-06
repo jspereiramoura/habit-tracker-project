@@ -15,6 +15,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@datadog/browser-logs": "^6.19.0",
     "@datadog/browser-rum": "^6.19.0",
     "@datadog/browser-rum-react": "^6.19.0",
     "@reduxjs/toolkit": "^2.6.0",
