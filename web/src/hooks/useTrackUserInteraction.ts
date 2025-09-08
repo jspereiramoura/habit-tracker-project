@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect } from "react";
-import { datadogLogs } from "@datadog/browser-logs"; // Example: Using Datadog
+import { datadogLogs } from "@datadog/browser-logs";
 
 function useTrackUserInteraction(eventName: string, callback: (event: Event) => void) {
   useEffect(() => {

@@ -1,15 +1,15 @@
+"use client";
+
 import useTrackUserInteraction from "@/hooks/useTrackUserInteraction";
 import Button from "../_components/button";
 import ActivityTrackerIllustration from "../_components/icons/ActivityTracker";
-import { useRef } from "react";
-import { register } from "module";
 
 export default function Home() {
 
    useTrackUserInteraction("click", (event) => {
       console.log("User clicked:", event.target);
   });
-
+  
   return (
     <section
       aria-label="Sessão de boas-vindas"
