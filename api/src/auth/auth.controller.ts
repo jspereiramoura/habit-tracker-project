@@ -9,11 +9,13 @@ import {
   signUpSchema
 } from "./auth.dto";
 import { AuthService } from "./auth.service";
+import { Public } from "./public/public.decorator";
 
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post("login")
   @HttpCode(HttpStatus.OK)
   @ApiBody({
@@ -32,6 +34,7 @@ export class AuthController {
     return await this.authService.signIn(body);
   }
 
+  @Public()
   @Post("register")
   @ApiBody({
     schema: { $ref: "#/components/schemas/SignUpObject" }
