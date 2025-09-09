@@ -4,20 +4,12 @@ import { datadogRum } from "@datadog/browser-rum";
 import { datadogLogs, Site } from "@datadog/browser-logs";
 import { useEffect } from "react";
 
-
-
 function initDatadog() {
     if (typeof window === "undefined") return;
 
-    const {
-        NEXT_PUBLIC_DATADOG_SITE = "",
-        NEXT_PUBLIC_DATADOG_APP_ID = "",
-        NEXT_PUBLIC_DATADOG_CLIENT_TOKEN = "",
-    } = process.env;
-
     datadogLogs.init({
-        clientToken: NEXT_PUBLIC_DATADOG_CLIENT_TOKEN,
-        site: NEXT_PUBLIC_DATADOG_SITE as Site,
+        clientToken: process.env.NEXT_PUBLIC_DATADOG_CLIENT_TOKEN ?? "",
+        site: process.env.NEXT_PUBLIC_DATADOG_SITE as Site,
         forwardErrorsToLogs: true,
         sessionSampleRate: 100,
         service: 'habit-tracker-frontend',
@@ -27,9 +19,9 @@ function initDatadog() {
     });
 
     datadogRum.init({
-        applicationId: NEXT_PUBLIC_DATADOG_APP_ID,
-        clientToken: NEXT_PUBLIC_DATADOG_CLIENT_TOKEN,
-        site: NEXT_PUBLIC_DATADOG_SITE as Site,
+        applicationId: process.env.NEXT_PUBLIC_DATADOG_APP_ID ?? "",
+        clientToken: process.env.NEXT_PUBLIC_DATADOG_CLIENT_TOKEN ?? "",
+        site: process.env.NEXT_PUBLIC_DATADOG_SITE as Site,
         service: 'habit-tracker-frontend',
         env: 'production',
         sessionSampleRate: 100,
